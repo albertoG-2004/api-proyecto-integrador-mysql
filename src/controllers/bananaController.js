@@ -61,7 +61,6 @@ export const registerBanana = async (req, res) => {
 
 export const findAllClassification = async (req, res) => {
     try {
-
         const bananas = await Banana.findAll();
 
         if (!bananas || bananas.length === 0) {

@@ -6,7 +6,7 @@ import helmet from "helmet";
 import routesUser from './src/routes/userRoute.js';
 import routesBanana from "./src/routes/bananaRoute.js";
 import routesMonitoring from "./src/routes/monitoringRoute.js";
-import { connectToDatabase } from './src/connection/connection.js';
+import { connectToDatabase, sequelize } from './src/connection/connection.js';
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -38,7 +38,12 @@ app.use("/users", routesUser);
 app.use("/bananas", routesBanana);
 app.use("/monitorings", routesMonitoring);
 
-app.listen(port, () => {
-    signale.success("Server running in port: " + port);
-});
-connectToDatabase();
+const startServer = async () => {
+    await connectToDatabase();
+    await sequelize.sync({ force: true });
+    app.listen(port, () => {
+        console.log(`Servidor escuchando en el puerto ${port}`);
+    });
+};
+
+startServer();
